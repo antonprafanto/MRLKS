@@ -1,4 +1,4 @@
-# Sistem Penilaian Mobile Robotics LKS 2025
+# Sistem Penilaian Mobile Robotics LKS 2025 (MRLKS)
 
 Sistem web application untuk penilaian kompetisi robotika mobile berdasarkan standar LKS 2025.
 
@@ -38,8 +38,8 @@ Sistem web application untuk penilaian kompetisi robotika mobile berdasarkan sta
 
 1. **Clone repository**
    ```bash
-   git clone <repository-url>
-   cd mobile-robotics-scoring
+   git clone https://github.com/antonprafanto/MRLKS.git
+   cd MRLKS
    ```
 
 2. **Install dependencies**
@@ -122,152 +122,33 @@ Sistem web application untuk penilaian kompetisi robotika mobile berdasarkan sta
 2. Lihat ranking real-time
 3. Klik "Detail" untuk melihat breakdown skor
 
-## 🌐 Deployment Online
+## 🌐 Deployment ke Railway (Recommended)
 
-### Opsi 1: Vercel (Recommended untuk Frontend + Serverless)
+### Step 1: Setup Railway
+1. Daftar di [railway.app](https://railway.app)
+2. Connect dengan GitHub account
+3. Create new project dari repository ini
 
-1. **Persiapan**
-   ```bash
-   npm install -g vercel
-   ```
+### Step 2: Add MySQL Database
+1. Klik "Add Service" → "Database" → "MySQL"
+2. Tunggu database provisioning selesai
 
-2. **Deploy**
-   ```bash
-   vercel
-   # Ikuti instruksi setup
-   ```
-
-3. **Environment Variables**
-   - Set di Vercel dashboard:
-   - `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
-
-### Opsi 2: Railway (Recommended untuk Full-Stack)
-
-1. **Persiapan**
-   - Daftar di [railway.app](https://railway.app)
-   - Install Railway CLI
-
-2. **Deploy**
-   ```bash
-   railway login
-   railway init
-   railway up
-   ```
-
-3. **Database**
-   - Add MySQL service di Railway dashboard
-   - Set environment variables
-
-### Opsi 3: DigitalOcean App Platform
-
-1. **Persiapan**
-   - Push ke GitHub repository
-   - Daftar di DigitalOcean
-
-2. **Deploy**
-   - Create new App di DigitalOcean
-   - Connect GitHub repository
-   - Add MySQL database component
-
-### Opsi 4: Heroku
-
-1. **Persiapan**
-   ```bash
-   npm install -g heroku
-   heroku login
-   ```
-
-2. **Deploy**
-   ```bash
-   heroku create your-app-name
-   heroku addons:create jawsdb:kitefin  # MySQL addon
-   git push heroku main
-   ```
-
-### Opsi 5: VPS (Manual Setup)
-
-1. **Server Setup (Ubuntu)**
-   ```bash
-   # Update system
-   sudo apt update && sudo apt upgrade -y
-   
-   # Install Node.js
-   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-   sudo apt-get install -y nodejs
-   
-   # Install MySQL
-   sudo apt install mysql-server -y
-   
-   # Install PM2
-   npm install -g pm2
-   ```
-
-2. **Deploy Application**
-   ```bash
-   # Clone repository
-   git clone <your-repo>
-   cd mobile-robotics-scoring
-   
-   # Install dependencies
-   npm install
-   
-   # Setup database
-   npm run setup-db
-   
-   # Start with PM2
-   pm2 start backend/server.js --name "robotics-scoring"
-   pm2 startup
-   pm2 save
-   ```
-
-3. **Setup Nginx (Optional)**
-   ```bash
-   sudo apt install nginx -y
-   sudo nano /etc/nginx/sites-available/robotics-scoring
-   ```
-   
-   ```nginx
-   server {
-       listen 80;
-       server_name your-domain.com;
-       
-       location / {
-           proxy_pass http://localhost:3000;
-           proxy_http_version 1.1;
-           proxy_set_header Upgrade $http_upgrade;
-           proxy_set_header Connection 'upgrade';
-           proxy_set_header Host $host;
-           proxy_cache_bypass $http_upgrade;
-       }
-   }
-   ```
-
-## 🚀 Rekomendasi Deployment
-
-**Untuk Penggunaan Kompetisi:**
-- **Railway** - Mudah setup, database included
-- **DigitalOcean** - Stable, good performance
-- **VPS** - Full control, custom domain
-
-**Untuk Demo/Testing:**
-- **Vercel** - Gratis, cepat deploy
-- **Heroku** - Mudah setup
-
-## 📝 Konfigurasi Database Cloud
-
-### Railway MySQL
+### Step 3: Configure Environment Variables
+Set variables berikut di Railway dashboard:
 ```env
-DB_HOST=containers-us-west-x.railway.app
-DB_USER=root
-DB_PASSWORD=generated-password
-DB_NAME=railway
-DB_PORT=6543
+NODE_ENV=production
+DB_HOST=${{MySQL.MYSQL_HOST}}
+DB_USER=${{MySQL.MYSQL_USER}}
+DB_PASSWORD=${{MySQL.MYSQL_PASSWORD}}
+DB_NAME=${{MySQL.MYSQL_DATABASE}}
+DB_PORT=${{MySQL.MYSQL_PORT}}
+PORT=3000
 ```
 
-### JawsDB (Heroku)
-```env
-JAWSDB_URL=mysql://username:password@hostname:port/database_name
-```
+### Step 4: Deploy
+- Railway akan auto-deploy dari GitHub
+- Database akan ter-setup otomatis
+- Akses via domain Railway: `https://your-app.up.railway.app`
 
 ## 🔐 Security Notes
 
@@ -280,7 +161,7 @@ JAWSDB_URL=mysql://username:password@hostname:port/database_name
 
 Jika ada masalah atau pertanyaan:
 1. Check dokumentasi API
-2. Lihat logs di server: `pm2 logs`
+2. Lihat logs di Railway dashboard
 3. Test API endpoints dengan Postman
 4. Backup database sebelum perubahan besar
 
