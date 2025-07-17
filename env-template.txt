@@ -1,0 +1,16 @@
+# Railway Environment Variables Template
+# Copy these to your Railway project environment variables
+
+# Application
+PORT=3000
+NODE_ENV=production
+
+# Database (Railway MySQL will auto-provide these)
+DB_HOST=your-railway-mysql-host
+DB_USER=your-railway-mysql-user
+DB_PASSWORD=your-railway-mysql-password
+DB_NAME=railway
+DB_PORT=3306
+
+# Alternative: Use MYSQL_URL if Railway provides it
+# MYSQL_URL=mysql://user:password@host:port/database
